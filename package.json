@@ -8,7 +8,10 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "lint": "npm run lint:js"
+    "lint": "npm run lint:js",
+    "build:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES npm run generate",
+    "deploy:gh-pages": "cross-env NODE_DEBUG=gh-pages gh-pages -d dist -t",
+    "publish": "npm run build:gh-pages && npm run deploy:gh-pages"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
@@ -17,6 +20,8 @@
     "nuxt-buefy": "^0.4.3"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
+    "gh-pages": "^3.1.0",
     "node-sass": "^5.0.0",
     "sass-loader": "^10.1.0"
   }

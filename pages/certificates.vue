@@ -59,12 +59,13 @@ export default {
     }
   },
   computed: {
-    title() {
+    title () {
       if (this.cert) return `CERTFICATE OF ${this.cert.type} | ${this.cert.to}`
       return 'AAAIMX Community | Certificates'
     },
     description () {
-      if (this.cert) return `The AAAI International Student Chapter recognizes ${this.cert.to} ${this.cert.description}`
+      if (this.cert)
+        return `The AAAI International Student Chapter recognizes ${this.cert.to} ${this.cert.description}`
       return 'Contributing to more students having knowledge of Artificial Intelligence and other increasingly popular related fields'
     },
     url () {
@@ -72,10 +73,13 @@ export default {
     }
   },
   async asyncData ({ $axios, route }) {
-    const cert = await $axios.$get(
-      'https://aaaimx-admin.herokuapp.com/api/certificates/' + route.query.id,
-      config
-    )
+    var cert = {}
+    if (route.query.id) {
+      cert = await $axios.$get(
+    `https://aaaimx-admin.herokuapp.com/api/certificates/${route.query.id}/`,
+        config
+      )
+    }
     return {
       cert
     }

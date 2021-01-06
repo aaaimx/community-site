@@ -182,6 +182,10 @@ export default {
         )
       }
       // this.list = this.list.slice(offset, offset + limit)
+      if (process.client) {
+        window.scrollTo(0, 0)
+      }
+      
     }
   },
   created () {

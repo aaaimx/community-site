@@ -5,7 +5,7 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { hid: 'description', name: 'description', content: 'Contributing to more students having knowledge of Artificial Intelligence and other increasingly popular related fields' }
     ],
     link: [
       {
@@ -24,6 +24,7 @@ export default {
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000'
   },
+  ssr: false,
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: ['@/assets/scss/main.scss'],
@@ -48,8 +49,13 @@ export default {
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
 
+  target: 'static',
+  router: {
+    base: '/aaaimx-community/'
+  },
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
-    publicPath: '/aaaimx-community/'
+    // publicPath: '/aaaimx-community/'
   }
 }
