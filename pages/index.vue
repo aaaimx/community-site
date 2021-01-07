@@ -54,6 +54,43 @@
         <div class="columns">
           <div class="column is-9">
             <div class="box content">
+              <template v-for="skeleton in 3">
+                <article
+                  v-if="isLoading"
+                  class="post"
+                  :key="skeleton"
+                >
+                  <div class="media">
+                    <div class="media-left">
+                      <p class="image is-48x48">
+                        <b-skeleton
+                          circle
+                          width="48px"
+                          height="48px"
+                        ></b-skeleton>
+                      </p>
+                    </div>
+                    <div class="media-content">
+                      <div class="content">
+                        <p>
+                          <b-skeleton active></b-skeleton>
+                          <b-skeleton height="80px"></b-skeleton>
+                        </p>
+                      </div>
+                      <nav class="level is-mobile">
+                        <div class="level-left">
+                          <a class="level-item" v-for="i in 3" :key="i">
+                            <span class="icon is-small">
+                              <b-skeleton></b-skeleton>
+                            </span>
+                          </a>
+                        </div>
+                      </nav>
+                    </div>
+                  </div>
+                </article>
+              </template>
+
               <article v-for="member in list" :key="member.id" class="post">
                 <div class="media">
                   <div class="media-left">
@@ -96,7 +133,10 @@
             </div>
           </div>
           <div class="column is-3">
-            <a class="button is-primary is-rounded is-block is-alt is-small" href="#">
+            <a
+              class="button is-primary is-rounded is-block is-alt is-small"
+              href="#"
+            >
               {{ list.length }} of {{ total }} members</a
             >
             <aside class="menu">
@@ -135,11 +175,15 @@
 import members from './clients.json'
 import roles from './roles.json'
 export default {
-  data () {
+  async asyncData ({ $axios }) {
+    const data = await $axios.$get(
+      'https://aaaimx-discord.herokuapp.com/api/members/'
+    )
     return {
-      list: [],
-      roles: roles.data,
+      list: data.members || members,
+      roles: data.roles || roles.data,
       total: 0,
+      isLoading: false,
       listQuery: {
         page: 1,
         limit: 10,
@@ -172,20 +216,23 @@ export default {
   },
   methods: {
     filterMembers () {
-      let offset = this.listQuery.limit * (this.listQuery.page - 1)
-      let limit = this.listQuery.limit
-      this.list = members.data
-      this.total = members.data.length
-      if (this.listQuery.role) {
-        this.list = this.list.filter(
-          m => m.roles.indexOf(this.listQuery.role) !== -1
-        )
-      }
-      // this.list = this.list.slice(offset, offset + limit)
+      this.isLoading = true
+      setTimeout(() => {
+        let offset = this.listQuery.limit * (this.listQuery.page - 1)
+        let limit = this.listQuery.limit
+        this.list = members.data
+        this.total = members.data.length
+        if (this.listQuery.role) {
+          this.list = this.list.filter(
+            m => m.roles.indexOf(this.listQuery.role) !== -1
+          )
+        }
+        this.isLoading = false
+        // this.list = this.list.slice(offset, offset + limit)
+      }, 1000)
       if (process.client) {
         window.scrollTo(0, 0)
       }
-      
     }
   },
   created () {
