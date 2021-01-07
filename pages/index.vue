@@ -96,7 +96,7 @@
             </div>
           </div>
           <div class="column is-3">
-            <a class="button is-primary is-block is-alt is-large" href="#">
+            <a class="button is-primary is-rounded is-block is-alt is-small" href="#">
               {{ list.length }} of {{ total }} members</a
             >
             <aside class="menu">
@@ -241,8 +241,8 @@ aside.menu .menu-label {
 
 .button.is-primary.is-alt {
   background: #d9ad26;
-  background: -webkit-linear-gradient(to bottom, #800000, #d9ad26);
-  background: linear-gradient(to bottom, #800000, #d9ad26);
+  /* background: -webkit-linear-gradient(to bottom, #800000, #d9ad26);
+  background: linear-gradient(to bottom, #800000, #d9ad26); */
   font-weight: 700;
   font-size: 14px;
   height: 3rem;

@@ -51,7 +51,7 @@ export default {
 
   target: 'static',
   router: {
-    base: '/aaaimx-community/'
+    base: '/community/'
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)

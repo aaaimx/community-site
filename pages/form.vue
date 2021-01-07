@@ -117,6 +117,13 @@
                       {{ option }}
                     </option>
                   </b-select>
+                  <br />
+                  <b-input
+                    v-if="form.adscription === 'Otro'"
+                    v-model="others.adscription"
+                    placeholder="Especifique"
+                    name="adscription"
+                  />
                 </b-field>
                 <b-field
                   label="Departamento"
@@ -135,6 +142,13 @@
                       {{ option }}
                     </option>
                   </b-select>
+                  <br />
+                  <b-input
+                    v-if="form.department === 'Otro'"
+                    v-model="others.department"
+                    placeholder="Especifique"
+                    name="department"
+                  />
                 </b-field>
                 <b-field label="Carrera" message="Área o campo de estudio">
                   <b-select
@@ -150,6 +164,13 @@
                       {{ option }}
                     </option>
                   </b-select>
+                  <br />
+                  <b-input
+                    v-if="form.career === 'Otro'"
+                    v-model="others.career"
+                    placeholder="Especifique"
+                    name="career"
+                  />
                 </b-field>
                 <b-field label="Matricula" message="Matricula (o equivalente)">
                   <b-input
@@ -193,12 +214,12 @@ import mapValues from 'lodash/mapValues'
 // import { registerParticipant } from '@/api/participants'
 
 const defaulForm = {
-  fullname: 'raul novelo cruz',
-  email: 'raul.novelo@aaaimx.org',
-  enrollment: '',
-  department: 'Departamento de Sistemas y Computación (DSC)',
-  career: 'Ingeniería en Sistemas Computacionales',
-  adscription: 'ITM'
+  fullname: null,
+  email: null,
+  enrollment: null,
+  department: null,
+  career: null,
+  adscription: null
 }
 
 export default {
@@ -211,6 +232,11 @@ export default {
       events: data.results,
       isLoading: false,
       form: defaulForm,
+      others: {
+        department: '',
+        career: '',
+        adscription: ''
+      },
       careers: [
         'Ingeniería en Gestión Empresarial',
         'Ingeniería Ambiental',
@@ -224,7 +250,7 @@ export default {
         'Ingeniería Industrial',
         'Ingeniería en Sistemas Computacionales',
         'Licenciatura en Administración',
-        'Otra'
+        'Otro'
       ],
       universities: ['ITM', 'UADY', 'UPY', 'Anahuac Mayab', 'Otro'],
       departments: [
@@ -254,7 +280,11 @@ export default {
         this.isLoading = true
         this.form.fullname = this.form.fullname.toUpperCase()
         this.form.enrollment = this.form.enrollment.toUpperCase()
-        await registerParticipant(this.form)
+        if (this.form.adscription === 'Otro') this.form.adscription = this.others.adscription
+        if (this.form.career === 'Otro') this.form.career = this.others.career
+        if (this.form.department === 'Otro') this.form.department = this.others.department
+        console.log(this.form)
+        await this.$axios.$post('https://aaaimx-admin.herokuapp.com/api/participants/register/', this.form)
         this.$buefy.dialog.alert({
           title: 'Respuesta enviada',
           message:
