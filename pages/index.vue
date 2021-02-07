@@ -55,11 +55,7 @@
           <div class="column is-9">
             <div class="box content">
               <template v-for="skeleton in 3">
-                <article
-                  v-if="isLoading"
-                  class="post"
-                  :key="skeleton"
-                >
+                <article v-if="isLoading" class="post" :key="skeleton">
                   <div class="media">
                     <div class="media-left">
                       <p class="image is-48x48">
@@ -114,9 +110,7 @@
                   </div>
                   <div class="media-right is-hidden-mobile">
                     <span class="has-text-grey-light"
-                      ><i class="fa fa-id-card"></i> 3A{{
-                        member.id.slice(0, 10)
-                      }}</span
+                      ><i class="fa fa-id-card"></i> {{ member.id }}</span
                     >
                   </div>
                 </div>
@@ -146,13 +140,14 @@
                 <b-tag
                   rounded
                   v-for="role in roles"
-                  :key="role"
+                  :key="role.name"
+                  :style="{ border: 'solid 1px ' + role.color, margin: '2px' }"
                   :type="
-                    listQuery.role === role ? 'is-link' : 'is-info is-light'
+                    listQuery.role === role.name ? 'is-link' : 'is-info is-light'
                   "
                   size="is-small"
-                  ><a @click="listQuery.role = role"
-                    ><b>{{ role }}</b></a
+                  ><a @click="listQuery.role = role.name"
+                    ><b>{{ role.name }}</b></a
                   ></b-tag
                 >
               </ul>
@@ -172,17 +167,16 @@
 </template>
 
 <script>
-import members from './clients.json'
-import roles from './roles.json'
 export default {
   async asyncData ({ $axios }) {
     const data = await $axios.$get(
       'https://aaaimx-discord.herokuapp.com/api/members/'
     )
     return {
-      list: data.members || members,
-      roles: data.roles || roles.data,
-      total: 0,
+      members: data.members,
+      list: data.members,
+      roles: data.roles,
+      total: data.members.length,
       isLoading: false,
       listQuery: {
         page: 1,
@@ -220,8 +214,8 @@ export default {
       setTimeout(() => {
         let offset = this.listQuery.limit * (this.listQuery.page - 1)
         let limit = this.listQuery.limit
-        this.list = members.data
-        this.total = members.data.length
+        this.list = this.members
+        this.total = this.members.length
         if (this.listQuery.role) {
           this.list = this.list.filter(
             m => m.roles.indexOf(this.listQuery.role) !== -1
@@ -234,9 +228,6 @@ export default {
         window.scrollTo(0, 0)
       }
     }
-  },
-  created () {
-    this.filterMembers()
   }
 }
 </script>
@@ -323,9 +314,5 @@ article.post:last-child {
 
 .menu-list li {
   padding: 5px;
-}
-.tag {
-  border: solid 1px #d9ad26;
-  margin: 2px;
 }
 </style>

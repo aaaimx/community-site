@@ -1,0 +1,71 @@
+{
+    "careers": [
+        "Ingeniería en Gestión Empresarial",
+        "Ingeniería Ambiental",
+        "Ingeniería Bioquímica",
+        "Ingeniería Biomédica",
+        "Ingeniería Química",
+        "Ingeniería Eléctrica",
+        "Ingeniería Electrónica",
+        "Ingeniería Mecánica",
+        "Ingeniería Civil",
+        "Ingeniería Industrial",
+        "Ingeniería en Sistemas Computacionales",
+        "Licenciatura en Administración",
+        "Otro"
+    ],
+    "universities": [
+        "ITM",
+        "UADY",
+        "UPY",
+        "Anahuac Mayab",
+        "Otro"
+    ],
+    "grades": [
+        "Bachillerato",
+        "Ingeniería",
+        "Licenciatura",
+        "Maestría",
+        "Doctorado",
+        "Otro"
+    ],
+    "departments": [
+        "Departamento de Sistemas y Computación (DSC)",
+        "Departamento de Ing. Eléctrica y Electrónica (DIEE)",
+        "Otro"
+    ],
+    "divisions": [
+        "Machine Learning",
+        "Software",
+        "Robótica/Electrónica",
+        "Bioingeniería",
+        "Matemáticas Aplicadas",
+        "Operaciones (Social Media, Finanzas, Vinculación, Eventos)",
+        "Impacto Socioambiental"
+    ],
+    "clubs": [
+        "Club de Programación (WolfCode)",
+        "Club de Ciberseguridad",
+        "Club de Inglés",
+        "Club de Ajedrez",
+        "Club Gaming (GameWolf)",
+        "Otro"
+    ],
+    "membership_types": [
+        "Adquirir una membresía y colaborar de forma activa",
+        "Colaborar de forma activa",
+        "Servicio Social",
+        "Indeciso. Decidir después"
+    ],
+    "skills": [
+        "Programación",
+        "Habilidades didácticas para dar clases y/o asesorías",
+        "Edición de video",
+        "Diseño gráfico (logos, banners, etc)",
+        "Manejo de Social Media",
+        "Finanzas",
+        "Liderazgo",
+        "Comunicación (redacción, hablar en público)",
+        "Dominio medio del inglés"
+    ]
+}

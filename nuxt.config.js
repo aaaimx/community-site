@@ -43,8 +43,17 @@ export default {
     // https://go.nuxtjs.dev/buefy
     'nuxt-buefy',
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/recaptcha',
   ],
+
+  recaptcha: {
+    hideBadge: true, // Hide badge element (v3 & v2 via size=invisible)
+    language: 'es',   // Recaptcha language (v2)
+    siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',    // Site key for requests
+    version: 'v3',     // Version
+    size: 'invisible'        // Size: 'compact', 'normal', 'invisible' (v2)
+  },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
