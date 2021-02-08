@@ -40,6 +40,47 @@
           required
         />
       </b-field>
+      <b-field label="Teléfono" message="Número de teléfono o celular">
+        <b-input
+          icon="phone"
+          type="tel"
+          v-model="form.phone"
+          placeholder="Teléfono"
+          name="phone"
+        />
+      </b-field>
+      <b-field label="Ocupación">
+        <b-select
+          expanded
+          placeholder="Selecciona una opción"
+          v-model="form.ocupation"
+          required
+        >
+          <option
+            v-for="(option, index) in ocupations"
+            :key="index"
+            :value="option"
+          >
+            {{ option }}
+          </option>
+        </b-select>
+      </b-field>
+      <b-field label="Género">
+        <b-select
+          expanded
+          placeholder="Selecciona una opción"
+          v-model="form.gender"
+        >
+          <option
+            v-for="(option, index) in genders"
+            :key="index"
+            :value="option"
+          >
+            {{ option }}
+          </option>
+        </b-select>
+      </b-field>
+      <hr />
       <b-field
         label="Evento"
         message="Curso, taller o plática al que desea inscribirse"
@@ -60,17 +101,16 @@
         </b-select>
       </b-field>
       <b-field
-        label="Adscripción"
-        message="Escuela o universidad de procedencia"
+        label="Grado de estudios"
+        message="Último grado de estudios o estudios actuales"
       >
         <b-select
           expanded
           placeholder="Selecciona una opción"
-          v-model="form.adscription"
-          required
+          v-model="form.grade"
         >
           <option
-            v-for="(option, index) in universities"
+            v-for="(option, index) in grades"
             :key="index"
             :value="option"
           >
@@ -79,68 +119,99 @@
         </b-select>
         <br />
         <b-input
-          v-if="form.adscription === 'Otro'"
-          v-model="others.adscription"
+          v-if="form.grade === 'Otro'"
+          v-model="others.grade"
           placeholder="Especifique"
-          name="adscription"
+          name="grade"
         />
       </b-field>
-      <b-field
-        label="Departamento"
-        message="Departamento (solo estudiantes del ITM)"
+      <template
+        v-if="form.ocupation === 'Estudiante' || form.ocupation === 'Docente'"
       >
-        <b-select
-          expanded
-          placeholder="Selecciona una opción"
-          v-model="form.department"
+        <b-field
+          label="Adscripción"
+          message="Escuela o universidad de procedencia"
         >
-          <option
-            v-for="(option, index) in departments"
-            :key="index"
-            :value="option"
+          <b-select
+            expanded
+            placeholder="Selecciona una opción"
+            v-model="form.adscription"
+            required
           >
-            {{ option }}
-          </option>
-        </b-select>
-        <br />
-        <b-input
-          v-if="form.department === 'Otro'"
-          v-model="others.department"
-          placeholder="Especifique"
-          name="department"
-        />
-      </b-field>
-      <b-field label="Carrera" message="Área o campo de estudio">
-        <b-select
-          expanded
-          placeholder="Selecciona una opción"
-          v-model="form.career"
+            <option
+              v-for="(option, index) in universities"
+              :key="index"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </b-select>
+          <br />
+          <b-input
+            v-if="form.adscription === 'Otro'"
+            v-model="others.adscription"
+            placeholder="Especifique"
+            name="adscription"
+          />
+        </b-field>
+        <b-field
+          label="Departamento"
+          message="Departamento (solo estudiantes/docentes del ITM)"
         >
-          <option
-            v-for="(option, index) in careers"
-            :key="index"
-            :value="option"
+          <b-select
+            expanded
+            placeholder="Selecciona una opción"
+            v-model="form.department"
           >
-            {{ option }}
-          </option>
-        </b-select>
-        <br />
-        <b-input
-          v-if="form.career === 'Otro'"
-          v-model="others.career"
-          placeholder="Especifique"
-          name="career"
-        />
-      </b-field>
-      <b-field label="Matricula" message="Matricula (o equivalente)">
-        <b-input
-          type="text"
-          v-model="form.enrollment"
-          placeholder=""
-          name="matricula"
-          required
-        />
-      </b-field>
+            <option
+              v-for="(option, index) in departments"
+              :key="index"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </b-select>
+          <br />
+          <b-input
+            v-if="form.department === 'Otro'"
+            v-model="others.department"
+            placeholder="Especifique"
+            name="department"
+          />
+        </b-field>
+        <b-field label="Carrera" message="Área o campo de estudio">
+          <b-select
+            expanded
+            placeholder="Selecciona una opción"
+            v-model="form.career"
+          >
+            <option
+              v-for="(option, index) in careers"
+              :key="index"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </b-select>
+          <br />
+          <b-input
+            v-if="form.career === 'Otro'"
+            v-model="others.career"
+            placeholder="Especifique"
+            name="career"
+          />
+        </b-field>
+        <b-field label="Matricula" message="Matricula (o equivalente)">
+          <b-input
+            type="text"
+            v-model="form.enrollment"
+            placeholder=""
+            name="matricula"
+            required
+          />
+        </b-field>
+      </template>
+      <recaptcha />
       <hr />
       <b-field>
         <div class="control">
@@ -159,6 +230,7 @@
 <script>
 import mapValues from 'lodash/mapValues'
 import constants from '../constants.json'
+import global from '~/mixins/global'
 
 const defaulForm = {
   fullname: null,
@@ -171,13 +243,14 @@ const defaulForm = {
 
 export default {
   name: 'EventRegisterForm',
+  mixins: [global],
   async asyncData ({ $axios }) {
     let data = {}
     try {
-      const data = await $axios.$get(
-        'https://aaaimx-admin.herokuapp.com/api/events/future/'
-      )
-    } catch (error) {}
+      data = await $axios.$get('events/future/')
+    } catch (error) {
+      console.log(error)
+    }
 
     return {
       events: data.results,
@@ -188,9 +261,7 @@ export default {
         career: '',
         adscription: ''
       },
-      careers: constants.careers,
-      universities: constants.universities,
-      departments: constants.departments
+      ...constants
     }
   },
   head () {
@@ -207,58 +278,47 @@ export default {
       ]
     }
   },
+  async mounted () {
+    try {
+      await this.$recaptcha.init()
+    } catch (e) {
+      console.error(e)
+    }
+  },
   methods: {
     async submit () {
-      try {
-        this.isLoading = true
-        this.form.fullname = this.form.fullname.toUpperCase()
+      this.isLoading = true
+      this.form.fullname = this.form.fullname.toUpperCase()
+      if (
+        this.form.ocupation === 'Estudiante' ||
+        this.form.ocupation === 'Docente'
+      ) {
         this.form.enrollment = this.form.enrollment.toUpperCase()
         if (this.form.adscription === 'Otro')
           this.form.adscription = this.others.adscription
         if (this.form.career === 'Otro') this.form.career = this.others.career
         if (this.form.department === 'Otro')
           this.form.department = this.others.department
-        console.log(this.form)
-        await this.$axios.$post(
-          'https://aaaimx-admin.herokuapp.com/api/participants/register/',
-          this.form
+      }
+      try {
+        const token = await this.$recaptcha.getResponse()
+        console.log('ReCaptcha token:', token)
+        // send token to server alongside your form data
+        await this.$axios.$post('/participants/register/', this.form)
+        this.alert(
+          'Respuesta enviada',
+          '<b>¡Enhoranbuena!</b> Se ha enviado tu respuesta.<br/> Se te enviará un correo con el <b>link de acceso</b>, a más tardar 12 hrs antes del evento.<br/><b>¡Nos vemos pronto!</b>...'
         )
-        this.$buefy.dialog.alert({
-          title: 'Respuesta enviada',
-          message:
-            '<b>¡Enhoranbuena!</b> Se ha enviado tu respuesta.<br/> Se te enviará un correo con el <b>link de acceso</b>, a más tardar 12 hrs antes del evento.<br/><b>¡Nos vemos pronto!</b>...',
-          type: 'is-success',
-          hasIcon: true,
-          icon: 'check-circle',
-          ariaRole: 'alertdialog',
-          confirmText: 'Entendido',
-          ariaModal: true
-        })
         this.reset()
       } catch (error) {
         console.log(error)
-        this.$buefy.dialog.alert({
-          title: 'Registro fallido',
-          message:
-            'No se ha podido completar tu <b>registro</b>.<br/>No se permiten <b>registros duplicados</b> o algo ha salido mal durante el proceso. <br/>Te recomendamos intentar más tarde.',
-          type: 'is-danger',
-          hasIcon: true,
-          icon: 'times-circle',
-          iconPack: 'fa',
-          ariaRole: 'alertdialog',
-          ariaModal: true
-        })
+        this.alertError(
+          'Registro fallido',
+          'No se ha podido completar tu <b>registro</b>.<br/>No se permiten <b>registros duplicados</b> o algo ha salido mal durante el proceso. <br/>Te recomendamos intentar más tarde.'
+        )
       } finally {
         this.isLoading = false
       }
-    },
-    reset () {
-      this.form = mapValues(this.form, item => {
-        if (item && typeof item === 'object') {
-          return []
-        }
-        return null
-      })
     }
   }
 }

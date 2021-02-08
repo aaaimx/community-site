@@ -21,6 +21,17 @@
         "Anahuac Mayab",
         "Otro"
     ],
+    "ocupations": [
+        "Estudiante",
+        "Docente",
+        "Otro"
+    ],
+    "genders": [
+        "Masculino",
+        "Femenino",
+        "Prefiero no decirlo",
+        "Otro"
+    ],
     "grades": [
         "Bachillerato",
         "Ingeniería",
