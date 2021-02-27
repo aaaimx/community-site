@@ -51,6 +51,7 @@
       </b-field>
       <b-field label="Ocupación">
         <b-select
+          v-if="ocupations.indexOf(form.ocupation) !== -1 || !form.ocupation"
           expanded
           placeholder="Selecciona una opción"
           v-model="form.ocupation"
@@ -63,7 +64,14 @@
           >
             {{ option }}
           </option>
+          <option>Otro</option>
         </b-select>
+        <b-input
+          v-else
+          v-model="form.ocupation"
+          placeholder="Especifique"
+          name="ocupation"
+        />
       </b-field>
       <b-field label="Género">
         <b-select
@@ -105,6 +113,7 @@
         message="Último grado de estudios o estudios actuales"
       >
         <b-select
+          v-if="grades.indexOf(form.grade) !== -1 || !form.grade"
           expanded
           placeholder="Selecciona una opción"
           v-model="form.grade"
@@ -116,11 +125,11 @@
           >
             {{ option }}
           </option>
+          <option>Otro</option>
         </b-select>
-        <br />
         <b-input
-          v-if="form.grade === 'Otro'"
-          v-model="others.grade"
+          v-else
+          v-model="form.grade"
           placeholder="Especifique"
           name="grade"
         />
@@ -133,6 +142,9 @@
           message="Escuela o universidad de procedencia"
         >
           <b-select
+            v-if="
+              universities.indexOf(form.adscription) !== -1 || !form.adscription
+            "
             expanded
             placeholder="Selecciona una opción"
             v-model="form.adscription"
@@ -145,11 +157,11 @@
             >
               {{ option }}
             </option>
+            <option>Otro</option>
           </b-select>
-          <br />
           <b-input
-            v-if="form.adscription === 'Otro'"
-            v-model="others.adscription"
+            v-else
+            v-model="form.adscription"
             placeholder="Especifique"
             name="adscription"
           />
@@ -159,6 +171,9 @@
           message="Departamento (solo estudiantes/docentes del ITM)"
         >
           <b-select
+            v-if="
+              departments.indexOf(form.department) !== -1 || !form.department
+            "
             expanded
             placeholder="Selecciona una opción"
             v-model="form.department"
@@ -170,17 +185,18 @@
             >
               {{ option }}
             </option>
+            <option>Otro</option>
           </b-select>
-          <br />
           <b-input
-            v-if="form.department === 'Otro'"
-            v-model="others.department"
+            v-else
+            v-model="form.department"
             placeholder="Especifique"
             name="department"
           />
         </b-field>
-        <b-field label="Carrera" message="Área o campo de estudio">
+        <b-field label="Carrera" message="Área o cmpo de estudio">
           <b-select
+            v-if="careers.indexOf(form.career) !== -1 || !form.career"
             expanded
             placeholder="Selecciona una opción"
             v-model="form.career"
@@ -192,11 +208,11 @@
             >
               {{ option }}
             </option>
+            <option>Otro</option>
           </b-select>
-          <br />
           <b-input
-            v-if="form.career === 'Otro'"
-            v-model="others.career"
+            v-else
+            v-model="form.career"
             placeholder="Especifique"
             name="career"
           />
@@ -228,9 +244,8 @@
   </Brand>
 </template>
 <script>
-import mapValues from 'lodash/mapValues'
-import constants from '../constants.json'
-import global from '~/mixins/global'
+import constants from "../constants.json";
+import global from "~/mixins/global";
 
 const defaulForm = {
   fullname: null,
@@ -239,89 +254,79 @@ const defaulForm = {
   department: null,
   career: null,
   adscription: null
-}
+};
 
 export default {
-  name: 'EventRegisterForm',
+  name: "EventRegisterForm",
   mixins: [global],
-  async asyncData ({ $axios }) {
-    let data = {}
+  async asyncData({ $axios }) {
+    let data = {};
     try {
-      data = await $axios.$get('events/future/')
+      data = await $axios.$get("events/future/");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
 
     return {
-      events: data.results,
+      events: data,
       isLoading: false,
       form: defaulForm,
-      others: {
-        department: '',
-        career: '',
-        adscription: ''
-      },
       ...constants
-    }
+    };
   },
-  head () {
+  head() {
     return {
-      title: 'AAAIMX Community | Event Registration',
+      title: "AAAIMX Community | Event Registration",
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         {
-          hid: 'description',
-          name: 'description',
+          hid: "description",
+          name: "description",
           content:
-            'Contributing to more students having knowledge of Artificial Intelligence and other increasingly popular related fields.'
+            "Contributing to more students having knowledge of Artificial Intelligence and other increasingly popular related fields."
         }
       ]
-    }
+    };
   },
-  async mounted () {
+  async mounted() {
     try {
-      await this.$recaptcha.init()
+      await this.$recaptcha.init();
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   },
   methods: {
-    async submit () {
-      this.isLoading = true
-      this.form.fullname = this.form.fullname.toUpperCase()
+    async submit() {
+      this.isLoading = true;
+      this.form.fullname = this.form.fullname.toUpperCase();
       if (
-        this.form.ocupation === 'Estudiante' ||
-        this.form.ocupation === 'Docente'
+        this.form.ocupation === "Estudiante" ||
+        this.form.ocupation === "Docente"
       ) {
-        this.form.enrollment = this.form.enrollment.toUpperCase()
-        if (this.form.adscription === 'Otro')
-          this.form.adscription = this.others.adscription
-        if (this.form.career === 'Otro') this.form.career = this.others.career
-        if (this.form.department === 'Otro')
-          this.form.department = this.others.department
+        this.form.enrollment = this.form.enrollment.toUpperCase();
       }
       try {
-        const token = await this.$recaptcha.getResponse()
-        console.log('ReCaptcha token:', token)
+        const token = await this.$recaptcha.getResponse();
+        console.log("ReCaptcha token:", token);
         // send token to server alongside your form data
-        await this.$axios.$post('/participants/register/', this.form)
+        await this.$axios.$post("/participants/register/", this.form);
         this.alert(
-          'Respuesta enviada',
-          '<b>¡Enhoranbuena!</b> Se ha enviado tu respuesta.<br/> Se te enviará un correo con el <b>link de acceso</b>, a más tardar 12 hrs antes del evento.<br/><b>¡Nos vemos pronto!</b>...'
-        )
-        this.reset()
+          "Respuesta enviada",
+          "<b>¡Enhoranbuena!</b> Se ha enviado tu respuesta.<br/> Se te enviará un correo con el <b>link de acceso</b>, a más tardar 12 hrs antes del evento.<br/><b>¡Nos vemos pronto!</b>..."
+        );
+        this.reset();
       } catch (error) {
-        console.log(error)
+        console.log(error);
         this.alertError(
-          'Registro fallido',
-          'No se ha podido completar tu <b>registro</b>.<br/>No se permiten <b>registros duplicados</b> o algo ha salido mal durante el proceso. <br/>Te recomendamos intentar más tarde.'
-        )
+          "Registro fallido",
+          "No se ha podido completar tu <b>registro</b>.<br/>No se permiten <b>registros duplicados</b> o algo ha salido mal durante el proceso. <br/>Te recomendamos intentar más tarde."
+        );
       } finally {
-        this.isLoading = false
+        this.isLoading = false;
       }
     }
   }
-}
+};
 </script>
 
 <style>

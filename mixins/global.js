@@ -1,3 +1,5 @@
+import mapValues from 'lodash/mapValues'
+
 export default {
   methods: {
     alert (title, message) {

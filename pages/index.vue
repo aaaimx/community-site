@@ -3,7 +3,7 @@
     <nav class="navbar is-transparent is-fixed-top topNav">
       <div class="container">
         <div class="navbar-brand">
-          <a class="navbar-item">
+          <a href="https://www.aaaimx.org" class="navbar-item">
             <img
               src="https://www.aaaimx.org/img/sprites/aaai-transpeps.png"
               height="28"
@@ -16,20 +16,14 @@
           </div>
         </div>
         <div id="topNav" class="navbar-menu">
-          <div class="navbar-start">
-            <!-- <a class="navbar-item" href="cover.html">Home</a>
-              <a class="navbar-item" href="landing.html">Landing</a>
-              <a class="navbar-item" href="blog.html">Blog</a>
-              <a class="navbar-item" href="instaAlbum.html">Album</a>
-              <a class="navbar-item" href="kanban[search].html">Kanban</a>
-              <a class="navbar-item" href="search.html">Search</a>
-              <a class="navbar-item" href="tabs.html">Tabs</a> -->
-          </div>
           <div class="navbar-end">
             <div class="navbar-item">
               <div class="field is-grouped">
                 <p class="control">
-                  <a class="button is-small is-primary">
+                  <a
+                    class="button is-small is-primary"
+                    href="forms/become-a-member"
+                  >
                     <b-icon icon="discord"></b-icon>&nbsp;
                     <span> Become a member </span>
                   </a>
@@ -100,7 +94,7 @@
                       <a href="#">@{{ member.username }}</a> joined at
                       {{ member.dateJoined }} <br />
                       <b-tag
-                        v-for="role in member.roles"
+                        v-for="role in member.roles.filter(r => r !== '@everyone')"
                         :key="role"
                         rounded
                         type="is-link is-light"
@@ -143,7 +137,9 @@
                   :key="role.name"
                   :style="{ border: 'solid 1px ' + role.color, margin: '2px' }"
                   :type="
-                    listQuery.role === role.name ? 'is-link' : 'is-info is-light'
+                    listQuery.role === role.name
+                      ? 'is-link'
+                      : 'is-info is-light'
                   "
                   size="is-small"
                   ><a @click="listQuery.role = role.name"

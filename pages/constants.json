@@ -11,39 +11,33 @@
         "Ingeniería Civil",
         "Ingeniería Industrial",
         "Ingeniería en Sistemas Computacionales",
-        "Licenciatura en Administración",
-        "Otro"
+        "Licenciatura en Administración"
     ],
     "universities": [
         "ITM",
         "UADY",
         "UPY",
-        "Anahuac Mayab",
-        "Otro"
+        "Anahuac Mayab"
     ],
     "ocupations": [
         "Estudiante",
-        "Docente",
-        "Otro"
+        "Docente"
     ],
     "genders": [
         "Masculino",
         "Femenino",
-        "Prefiero no decirlo",
-        "Otro"
+        "Prefiero no decirlo"
     ],
     "grades": [
         "Bachillerato",
         "Ingeniería",
         "Licenciatura",
         "Maestría",
-        "Doctorado",
-        "Otro"
+        "Doctorado"
     ],
     "departments": [
         "Departamento de Sistemas y Computación (DSC)",
-        "Departamento de Ing. Eléctrica y Electrónica (DIEE)",
-        "Otro"
+        "Departamento de Ing. Eléctrica y Electrónica (DIEE)"
     ],
     "divisions": [
         "Machine Learning",
@@ -59,8 +53,7 @@
         "Club de Ciberseguridad",
         "Club de Inglés",
         "Club de Ajedrez",
-        "Club Gaming (GameWolf)",
-        "Otro"
+        "Club Gaming (GameWolf)"
     ],
     "membership_types": [
         "Adquirir una membresía y colaborar de forma activa",
