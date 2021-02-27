@@ -90,8 +90,54 @@
       </b-field>
       <hr />
       <b-field
-        label="Evento"
-        message="Curso, taller o plática al que desea inscribirse"
+        <template>
+            <section>
+                <p class="content"><b>Selected:</b> {{ selected }}</p>
+                <b-field label="Evento">
+                    <b-autocomplete
+                        v-model="name"
+                        group-field="type"
+                        group-options="items"
+                        open-on-focus
+                        :data="filteredDataObj"
+                        @select="option => (selected = option)"
+                    >
+                    </b-autocomplete>
+                </b-field>
+            </section>
+        </template>
+
+<script>
+  
+  export default {
+    data() {
+      return {
+        data: [
+          {
+            type: "Curso, taller o plática al que desea inscribirse",
+            items: ["Apple", "Banana", "Watermelon"],
+          },
+        ],
+        name: "",
+        selected: null,
+      };
+    },
+    computed: {
+      filteredDataObj() {
+        const newData = [];
+        this.data.forEach((element) => {
+          const items = element.items.filter(
+            (item) => item.toLowerCase().indexOf(this.name.toLowerCase()) >= 0
+          );
+          if (items.length) {
+            newData.push({ type: element.type, items });
+          }
+        });
+        return newData;
+      },
+    },
+  };
+</script>
       >
         <b-select
           expanded
@@ -253,7 +299,7 @@ const defaulForm = {
   enrollment: null,
   department: null,
   career: null,
-  adscription: null
+  adscription: null,
 };
 
 export default {
@@ -271,7 +317,7 @@ export default {
       events: data,
       isLoading: false,
       form: defaulForm,
-      ...constants
+      ...constants,
     };
   },
   head() {
@@ -283,9 +329,9 @@ export default {
           hid: "description",
           name: "description",
           content:
-            "Contributing to more students having knowledge of Artificial Intelligence and other increasingly popular related fields."
-        }
-      ]
+            "Contributing to more students having knowledge of Artificial Intelligence and other increasingly popular related fields.",
+        },
+      ],
     };
   },
   async mounted() {
@@ -324,8 +370,8 @@ export default {
       } finally {
         this.isLoading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
