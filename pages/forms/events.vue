@@ -90,6 +90,7 @@
       </b-field>
       <hr />
       <b-field
+      
         <template>
             <section>
                 <p class="content"><b>Selected:</b> {{ selected }}</p>
