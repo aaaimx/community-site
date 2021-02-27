@@ -21,7 +21,12 @@
     ],
     "ocupations": [
         "Estudiante",
-        "Docente"
+        "Docente",
+        "Profesionista",
+        "Desarrollador",
+        "Ingeniero de Software",
+        "Ingeniero de Hardware",
+        "Investigador"
     ],
     "genders": [
         "Masculino",

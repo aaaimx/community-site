@@ -29,7 +29,7 @@
 
       <b-field
         label="Correo electrónico"
-        message="Dirección de correo electrónico"
+        message="Si eres estudiante/docente del ITM utiliza tu correo institucional (@merida.tecnm.mx / @itmerida.edu.mx)"
       >
         <b-input
           icon="email"
@@ -73,7 +73,7 @@
           name="ocupation"
         />
       </b-field>
-      <b-field label="Género">
+      <b-field label="Sexo">
         <b-select
           expanded
           placeholder="Selecciona una opción"
@@ -93,6 +93,7 @@
         <b-field label="Evento">
           <b-autocomplete
             open-on-focus
+            required
             field="title"
             clearable
             group-field="type"
@@ -113,12 +114,29 @@
           </b-autocomplete>
         </b-field>
       </b-field>
+      <article v-if="selected" class="media box">
+        <div class="media-content">
+          <div class="content">
+            <strong>{{ selected.type }}:</strong>
+            <span>{{ selected.title }}</span>
+            <br />
+            <small>
+              {{ new Date(selected.date_start).toLocaleString() }}
+            </small>
+          </div>
+        </div>
+        <!-- <div class="media-right">
+          <button @click="selected = null" class="delete"></button>
+        </div> -->
+      </article>
+      <hr />
       <b-field
         label="Grado de estudios"
         message="Último grado de estudios o estudios actuales"
       >
         <b-select
           v-if="grades.indexOf(form.grade) !== -1 || !form.grade"
+          required
           expanded
           placeholder="Selecciona una opción"
           v-model="form.grade"
@@ -139,9 +157,16 @@
           name="grade"
         />
       </b-field>
+
       <template
         v-if="form.ocupation === 'Estudiante' || form.ocupation === 'Docente'"
       >
+        <b-message type="is-warning" size="is-small">
+          Si eres estudiante del ITM y requieres validación de
+          <b>créditos complementarios</b> verifica haber registrado tu
+          <b>correo institucional, carrera, departamento y matrícula </b>
+          correctamente para poder verificar la información.
+        </b-message>
         <b-field
           label="Adscripción"
           message="Escuela o universidad de procedencia"
@@ -222,7 +247,11 @@
             name="career"
           />
         </b-field>
-        <b-field label="Matricula" message="Matricula (o equivalente)">
+        <b-field
+          v-if="form.ocupation === 'Estudiante'"
+          label="Matricula"
+          message="Matricula (o equivalente)"
+        >
           <b-input
             type="text"
             v-model="form.enrollment"
@@ -232,8 +261,16 @@
           />
         </b-field>
       </template>
-      <recaptcha />
+      <b-field v-else>
+        <b-input
+          v-model="form.adscription"
+          placeholder="Empresa u organización donde laboras"
+          name="adscription"
+          required
+        />
+      </b-field>
       <hr />
+      <recaptcha />
       <b-field>
         <div class="control">
           <b-button
@@ -320,10 +357,8 @@ export default {
     async submit() {
       this.isLoading = true;
       this.form.fullname = this.form.fullname.toUpperCase();
-      if (
-        this.form.ocupation === "Estudiante" ||
-        this.form.ocupation === "Docente"
-      ) {
+      this.form.event = this.selected.id;
+      if (this.form.ocupation === "Estudiante") {
         this.form.enrollment = this.form.enrollment.toUpperCase();
       }
       try {
