@@ -248,7 +248,7 @@
           />
         </b-field>
         <b-field
-          v-if="form.ocupation === 'Estudiante'"
+          v-if="form.ocupation === 'Estudiante' || form.ocupation === 'Docente'"
           label="Matricula"
           message="Matricula (o equivalente)"
         >
